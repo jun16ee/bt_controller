@@ -24,6 +24,8 @@ cmd_input (str): 指令類型 ('RESET', 'READY', 'TEST', 'PLAY', 'PAUSE')。
 
 delay_sec (float): 預期送達時間 (秒)，至少 1 秒 (e.g., 30)。
 
+prep_sec (float): delay 燈持續時間 (秒)
+
 target_ids (list): 目標設備 ID 列表 (e.g., [0, 2, 5])。
 
 Return: True 代表執行成功且收到 ESP32 回應；False 代表失敗或超時。

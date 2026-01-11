@@ -28,23 +28,24 @@ class ESP32BTSender:
         if self.ser and self.ser.is_open:
             self.ser.close()
 
-    def send_burst(self, cmd_input, delay_sec, target_ids, retries=3):
+    def send_burst(self, cmd_input, delay_sec, prep_led_sec, target_ids, retries=3):
         if not self.ser or not self.ser.is_open:
             return False
 
         cmd_int = cmd_input if isinstance(cmd_input, int) else self.CMD_MAP.get(cmd_input, 0)
         delay_us = int(delay_sec * 1_000_000)
+        prep_led_us = int(prep_led_sec * 1_000_000)
         target_mask = 0
         for pid in target_ids:
             target_mask |= (1 << pid)
 
-        # 格式: 160,1000000,23 (最後的 23 是 Hex)
-        packet = f"{cmd_int},{delay_us},{target_mask:x}\n"
+        # 格式: 160,4000000,100000,23
+        packet = f"{cmd_int},{delay_us},{prep_led_us},{target_mask:x}\n"
 
         for attempt in range(retries + 1):
             if attempt > 0:
                 logger.warning(f"Retrying... ({attempt}/{retries})")
-                time.sleep(0.2)
+                time.sleep(0.1)
 
             logger.info(f"Sending: {packet.strip()}")
             

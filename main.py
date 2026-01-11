@@ -12,7 +12,8 @@ def main():
             print("--- Test 1: Send PLAY Command ---")
             success = sender.send_burst(
                 cmd_input='PLAY',
-                delay_sec=1, 
+                delay_sec=4, 
+                prep_led_sec=1,
                 target_ids=[0, 1, 5],
                 retries=3,
             )
@@ -22,12 +23,13 @@ def main():
             else:
                 print(">>> Test 1 Failed!")
             
-            time.sleep(2)
+            time.sleep(3)
 
             print("--- Test 2: Send RESET Command ---")
             success = sender.send_burst(
                 cmd_input='RESET',
                 delay_sec=2, 
+                prep_led_sec=1,
                 target_ids=[0, 1, 5],
                 retries=3,
             )
