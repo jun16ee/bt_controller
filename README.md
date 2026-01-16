@@ -18,7 +18,7 @@ port: (必填) 序列埠名稱。
 
 baud_rate: 預設為 115200 (需與 ESP32 設定一致)。
 ```
-send_burst(cmd_input, delay_sec, target_ids):
+send_burst(cmd_input, delay_sec, target_ids, prep_sec):
 ```
 cmd_input (str): 指令類型 ('RESET', 'READY', 'TEST', 'PLAY', 'PAUSE')。
 
