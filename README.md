@@ -40,8 +40,8 @@ from bt_controller import ESP32BTSender
 PORT = 'COM13' 
 
 with ESP32BTSender(port=PORT) as sender:
-    # 發送指令：類型 play ，倒數 3 秒，給 player ID 0 和 1
-    if sender.send_burst('PLAY', 3.0, [0, 1]):
+    # 發送指令：類型 play ，倒數 3 秒，給 player ID 0 和 ，delay 燈 1 秒
+    if sender.send_burst('PLAY', 3.0, [0, 1], 1.0):
         print("Passed")
     else:
         print("Failed")
