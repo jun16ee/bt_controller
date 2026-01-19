@@ -12,11 +12,11 @@ pip install -r requirements.txt
 
 Class: ESP32BTSender
 ```
-__init__(port, baud_rate=115200, timeout=1):
+__init__(port, baud_rate=921600, timeout=1):
 ```
 port: (必填) 序列埠名稱。
 
-baud_rate: 預設為 115200 (需與 ESP32 設定一致)。
+baud_rate: 預設為 921600 (需與 ESP32 設定一致)。
 ```
 send_burst(cmd_input, delay_sec, target_ids, prep_sec):
 ```
@@ -27,6 +27,12 @@ delay_sec (float): 預期送達時間 (秒)，至少 1 秒 (e.g., 30)。
 prep_sec (float): delay 燈持續時間 (秒)
 
 target_ids (list): 目標設備 ID 列表 (e.g., [0, 2, 5])。
+
+data (list): 當指令為 'TEST' 或 'CANCEL' 時需填入
+| Command       | data[0] | data[1] | data[2] | 說明 |
+|:-------------:|:-------:|:-------:|:-------:|:----:|
+|'TEST'  |R|G|B|設定 RGB 燈光顏色|
+|'CANCEL'|cmd_id|(N/A)|(N/A)|取消指定 ID 的指令|
 
 Return: True 代表執行成功且收到 ESP32 回應；False 代表失敗或超時。
 
@@ -40,8 +46,15 @@ from bt_controller import ESP32BTSender
 PORT = 'COM13' 
 
 with ESP32BTSender(port=PORT) as sender:
-    # 發送指令：類型 play ，倒數 3 秒，給 player ID 0 和 ，delay 燈 1 秒
-    if sender.send_burst('PLAY', 3.0, [0, 1], 1.0):
+    # 發送指令：類型 play ，倒數 3 秒，給 player ID 0, 1, 5 ，delay 燈 1 秒
+    if sender.send_burst(
+        cmd_input='PLAY',
+        delay_sec=2, 
+        prep_led_sec=1,
+        target_ids=[0, 1, 5],
+        data=[0, 0, 0],
+        retries=3,
+    ):
         print("Passed")
     else:
         print("Failed")
